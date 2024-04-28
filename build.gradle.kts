@@ -22,7 +22,7 @@ dependencies {
 
     testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
     implementation("io.rest-assured:json-path:$restAssuredVersion")
-    implementation("io.rest-assured:json-schema-validator:5.4.0")
+    implementation("io.rest-assured:json-schema-validator:$restAssuredVersion")
 
     implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")

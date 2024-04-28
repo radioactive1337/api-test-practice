@@ -31,11 +31,11 @@ public class Specs {
                 .build();
     }
 
-    public static ResponseSpecification responseSpecGetOk() {
+    public static ResponseSpecification responseSpec(int status) {
         return new ResponseSpecBuilder()
                 .log(LogDetail.STATUS)
                 .expectContentType(JSON)
-                .expectStatusCode(200)
+                .expectStatusCode(status)
                 .expectResponseTime(lessThanOrEqualTo(3L), SECONDS)
                 .build();
     }

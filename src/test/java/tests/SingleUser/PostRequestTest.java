@@ -31,5 +31,4 @@ public class PostRequestTest extends BaseTest {
                 .body("name", is("Cloud"))
                 .body("job", is("AQA"));
     }
-
 }

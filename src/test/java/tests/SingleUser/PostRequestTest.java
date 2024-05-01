@@ -20,15 +20,15 @@ public class PostRequestTest extends BaseTest {
     @Test
     @Severity(SeverityLevel.BLOCKER)
     @DisplayName("User create testing (POST)")
-    public void postUser() {
+    public void createUser() {
+        User t1 = new User(123, "nickname", "Sam", "Altman", "mail@mail.com", "qwerty123", "88805050707", 1);
         RestAssured.given()
                 .spec(requestSpec())
-                .body(new User("Cloud", "AQA"))
-                .post("api/users")
+                .body(t1)
+                .post("user")
                 .then()
-                .spec(responseSpec(201))
+                .spec(responseSpec(200))
                 .assertThat()
-                .body("name", is("Cloud"))
-                .body("job", is("AQA"));
+                .body("message", is(t1.id().toString()));
     }
 }

@@ -23,7 +23,7 @@ public class Specs {
 
     public static RequestSpecification requestSpec() {
         return new RequestSpecBuilder()
-                .setBaseUri("https://reqres.in/")
+                .setBaseUri("https://petstore.swagger.io/v2/")
                 .setRelaxedHTTPSValidation()
                 .setContentType(JSON)
                 .setAccept(JSON)

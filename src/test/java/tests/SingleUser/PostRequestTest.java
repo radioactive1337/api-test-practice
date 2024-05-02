@@ -10,7 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import tests.BaseTest;
 
-import static org.hamcrest.Matchers.is;
+import java.util.HashMap;
+
+import static org.hamcrest.Matchers.equalTo;
 import static specs.Specs.requestSpec;
 import static specs.Specs.responseSpec;
 
@@ -19,16 +21,41 @@ import static specs.Specs.responseSpec;
 public class PostRequestTest extends BaseTest {
     @Test
     @Severity(SeverityLevel.BLOCKER)
-    @DisplayName("User create testing (POST)")
+    @DisplayName("Create user smoke test")
     public void createUser() {
-        User t1 = new User(123, "nickname", "Sam", "Altman", "mail@mail.com", "qwerty123", "88805050707", 1);
+        HashMap<String, Object> testUser1 = new HashMap<>();
+        testUser1.put("id", 123);
+        testUser1.put("username", "nickname");
+        testUser1.put("firstName", "Sam");
+        testUser1.put("lastName", "Altman");
+        testUser1.put("email", "mail@mail.com");
+        testUser1.put("password", "qwerty123");
+        testUser1.put("phone", "88805050707");
+        testUser1.put("userStatus", "1");
         RestAssured.given()
                 .spec(requestSpec())
-                .body(t1)
-                .post("user")
+                .body(testUser1)
+                .post("user/")
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
-                .body("message", is(t1.id().toString()));
+                .body("message", equalTo(testUser1.get("id").toString()))
+                .body("code", equalTo(200));
+    }
+
+    @Test
+    @Severity(SeverityLevel.BLOCKER)
+    @DisplayName("Create user smoke test")
+    public void createUserWithPojoClass() {
+        User testUser1 = new User(123, "nickname", "Sam", "Altman", "mail@mail.com", "qwerty123", "88805050707", 1);
+        RestAssured.given()
+                .spec(requestSpec())
+                .body(testUser1)
+                .post("user/")
+                .then()
+                .spec(responseSpec(200))
+                .assertThat()
+                .body("message", equalTo(testUser1.id().toString()))
+                .body("code", equalTo(200));
     }
 }

@@ -18,7 +18,7 @@ import static specs.Specs.requestSpec;
 import static specs.Specs.responseSpec;
 
 @Epic("Users")
-@Feature("Get user by username smoke test")
+@Feature("Get user by username")
 public class GetRequestTest extends BaseTest {
     User testUser = new User(666, "Quattro", "Sam", "Something", "gmail@gmail.com", "qwerty123", "88805050707", 3);
 
@@ -32,7 +32,7 @@ public class GetRequestTest extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.BLOCKER)
-    @DisplayName("Get user by username smoke test")
+    @DisplayName("Get user by username without pojo")
     public void getUser() {
         RestAssured.given()
                 .spec(requestSpec())
@@ -53,13 +53,14 @@ public class GetRequestTest extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.BLOCKER)
-    @DisplayName("Get user by username smoke test")
+    @DisplayName("Get user by username using pojo")
     public void getUserWithPojo() {
         User userResponse = RestAssured.given()
                 .spec(requestSpec())
                 .get(String.format("user/%s", testUser.username()))
                 .then()
                 .spec(responseSpec(200))
+                .body(matchesJsonSchemaInClasspath("singleUserSchema.json"))
                 .extract().as(User.class);
         assertEquals(userResponse.id(), testUser.id());
         assertEquals(userResponse.username(), testUser.username());
@@ -69,5 +70,52 @@ public class GetRequestTest extends BaseTest {
         assertEquals(userResponse.password(), testUser.password());
         assertEquals(userResponse.phone(), testUser.phone());
         assertEquals(userResponse.userStatus(), testUser.userStatus());
+    }
+
+    @Test
+    @Severity(SeverityLevel.BLOCKER)
+    @DisplayName("Get a non-existing user user by username")
+    public void getNonExistingUser() {
+        RestAssured.given()
+                .spec(requestSpec())
+                .pathParam("username", "useruseruser")
+                .get("user/{username}")
+                .then()
+                .spec(responseSpec(404))
+                .assertThat()
+                .body(matchesJsonSchemaInClasspath("infoResponseSchema.json"))
+                .body("message", equalTo("User not found"))
+                .body("type", equalTo("error"));
+    }
+
+    @Test
+    @Severity(SeverityLevel.BLOCKER)
+    @DisplayName("Get invalid user user by username")
+    public void getTooLargeUser() {
+        String largeUsername = generateLongString(9000);
+        RestAssured.given()
+                .spec(requestSpec())
+                .pathParam("username", largeUsername)
+                .get("user/{username}")
+                .then()
+                .assertThat()
+                .statusCode(414);
+    }
+
+//    @Test
+//    @Severity(SeverityLevel.BLOCKER)
+//    @DisplayName("Get invalid user user by username")
+//    public void getInvalidUser() {
+//        RestAssured.given()
+//                .spec(requestSpec())
+//                .pathParam("username", 12.2f)
+//                .get("user/{username}")
+//                .then()
+//                .spec(responseSpec(400))
+//                .log().all();
+//    }
+
+    private String generateLongString(int length) {
+        return "a".repeat(Math.max(0, length));
     }
 }

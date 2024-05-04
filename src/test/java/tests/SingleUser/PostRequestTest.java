@@ -12,6 +12,7 @@ import tests.BaseTest;
 
 import java.util.HashMap;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
 import static specs.Specs.requestSpec;
 import static specs.Specs.responseSpec;
@@ -21,7 +22,7 @@ import static specs.Specs.responseSpec;
 public class PostRequestTest extends BaseTest {
     @Test
     @Severity(SeverityLevel.BLOCKER)
-    @DisplayName("Create user smoke test")
+    @DisplayName("Create user without pojo")
     public void createUser() {
         HashMap<String, Object> testUser1 = new HashMap<>();
         testUser1.put("id", 123);
@@ -39,13 +40,14 @@ public class PostRequestTest extends BaseTest {
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
+                .body(matchesJsonSchemaInClasspath("infoResponseSchema.json"))
                 .body("message", equalTo(testUser1.get("id").toString()))
                 .body("code", equalTo(200));
     }
 
     @Test
     @Severity(SeverityLevel.BLOCKER)
-    @DisplayName("Create user smoke test")
+    @DisplayName("Create user using pojo")
     public void createUserWithPojoClass() {
         User testUser1 = new User(123, "nickname", "Sam", "Altman", "mail@mail.com", "qwerty123", "88805050707", 1);
         RestAssured.given()
@@ -55,6 +57,7 @@ public class PostRequestTest extends BaseTest {
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
+                .body(matchesJsonSchemaInClasspath("infoResponseSchema.json"))
                 .body("message", equalTo(testUser1.id().toString()))
                 .body("code", equalTo(200));
     }

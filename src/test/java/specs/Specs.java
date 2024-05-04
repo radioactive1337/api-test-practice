@@ -27,7 +27,7 @@ public class Specs {
                 .setRelaxedHTTPSValidation()
                 .setContentType(JSON)
                 .setAccept(JSON)
-//                .setConfig(cfg)
+                .setConfig(cfg)
                 .build();
     }
 

@@ -4,13 +4,13 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import io.restassured.RestAssured;
 import models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import tests.BaseTest;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,12 +19,12 @@ import static specs.Specs.responseSpec;
 
 @Epic("Users")
 @Feature("Get user by username")
-public class GetRequestTest extends BaseTest {
+public class GetUserTest extends BaseTest {
     User testUser = new User(666, "Quattro", "Sam", "Something", "gmail@gmail.com", "qwerty123", "88805050707", 3);
 
     @BeforeEach
     public void createTestUser() {
-        RestAssured.given()
+        given()
                 .spec(requestSpec())
                 .body(testUser)
                 .post("user/");
@@ -34,9 +34,10 @@ public class GetRequestTest extends BaseTest {
     @Severity(SeverityLevel.BLOCKER)
     @DisplayName("Get user by username without pojo")
     public void getUser() {
-        RestAssured.given()
+        given()
                 .spec(requestSpec())
-                .get(String.format("user/%s", testUser.username()))
+                .pathParam("username", testUser.username())
+                .get("user/{username}")
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
@@ -55,28 +56,29 @@ public class GetRequestTest extends BaseTest {
     @Severity(SeverityLevel.BLOCKER)
     @DisplayName("Get user by username using pojo")
     public void getUserWithPojo() {
-        User userResponse = RestAssured.given()
+        User userResponse = given()
                 .spec(requestSpec())
-                .get(String.format("user/%s", testUser.username()))
+                .pathParam("username", testUser.username())
+                .get("user/{username}")
                 .then()
                 .spec(responseSpec(200))
                 .body(matchesJsonSchemaInClasspath("singleUserSchema.json"))
                 .extract().as(User.class);
-        assertEquals(userResponse.id(), testUser.id());
-        assertEquals(userResponse.username(), testUser.username());
-        assertEquals(userResponse.firstName(), testUser.firstName());
-        assertEquals(userResponse.lastName(), testUser.lastName());
-        assertEquals(userResponse.email(), testUser.email());
-        assertEquals(userResponse.password(), testUser.password());
-        assertEquals(userResponse.phone(), testUser.phone());
-        assertEquals(userResponse.userStatus(), testUser.userStatus());
+        assertEquals(userResponse.id(), testUser.id(), "id is not as expected");
+        assertEquals(userResponse.username(), testUser.username(), "username is not as expected");
+        assertEquals(userResponse.firstName(), testUser.firstName(), "firstname is not as expected");
+        assertEquals(userResponse.lastName(), testUser.lastName(), "lastname is not as expected");
+        assertEquals(userResponse.email(), testUser.email(), "email is not as expected");
+        assertEquals(userResponse.password(), testUser.password(), "password is not as expected");
+        assertEquals(userResponse.phone(), testUser.phone(), "phone is not as expected");
+        assertEquals(userResponse.userStatus(), testUser.userStatus(), "usersatus is not as expected");
     }
 
     @Test
     @Severity(SeverityLevel.BLOCKER)
     @DisplayName("Get a non-existing user user by username")
     public void getNonExistingUser() {
-        RestAssured.given()
+        given()
                 .spec(requestSpec())
                 .pathParam("username", "useruseruser")
                 .get("user/{username}")
@@ -93,7 +95,7 @@ public class GetRequestTest extends BaseTest {
     @DisplayName("Get invalid user user by username")
     public void getTooLargeUser() {
         String largeUsername = generateLongString(9000);
-        RestAssured.given()
+        given()
                 .spec(requestSpec())
                 .pathParam("username", largeUsername)
                 .get("user/{username}")
@@ -106,7 +108,7 @@ public class GetRequestTest extends BaseTest {
 //    @Severity(SeverityLevel.BLOCKER)
 //    @DisplayName("Get invalid user user by username")
 //    public void getInvalidUser() {
-//        RestAssured.given()
+//        given()
 //                .spec(requestSpec())
 //                .pathParam("username", 12.2f)
 //                .get("user/{username}")

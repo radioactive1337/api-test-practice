@@ -4,7 +4,6 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import io.restassured.RestAssured;
 import models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +11,7 @@ import tests.BaseTest;
 
 import java.util.HashMap;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
 import static specs.Specs.requestSpec;
@@ -19,7 +19,7 @@ import static specs.Specs.responseSpec;
 
 @Epic("Users")
 @Feature("Create user")
-public class PostRequestTest extends BaseTest {
+public class CreateUserTest extends BaseTest {
     @Test
     @Severity(SeverityLevel.BLOCKER)
     @DisplayName("Create user without pojo")
@@ -33,7 +33,7 @@ public class PostRequestTest extends BaseTest {
         testUser1.put("password", "qwerty123");
         testUser1.put("phone", "88805050707");
         testUser1.put("userStatus", "1");
-        RestAssured.given()
+        given()
                 .spec(requestSpec())
                 .body(testUser1)
                 .post("user/")
@@ -50,7 +50,7 @@ public class PostRequestTest extends BaseTest {
     @DisplayName("Create user using pojo")
     public void createUserWithPojoClass() {
         User testUser1 = new User(123, "nickname", "Sam", "Altman", "mail@mail.com", "qwerty123", "88805050707", 1);
-        RestAssured.given()
+        given()
                 .spec(requestSpec())
                 .body(testUser1)
                 .post("user/")

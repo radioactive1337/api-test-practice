@@ -8,19 +8,16 @@ import models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import tests.BaseTest;
 
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
-import static specs.Specs.requestSpec;
-import static specs.Specs.responseSpec;
 
 @Epic("Users")
 @Feature("Update user")
-public class UpdateUserTest extends BaseTest {
+public class UpdateUserTest extends UserBaseTest {
     User testUser = new User(12345, "Quattro", "Sam", "Something", "gmail@gmail.com", "qwerty123", "88805050707", 3);
 
     @BeforeEach
@@ -28,7 +25,7 @@ public class UpdateUserTest extends BaseTest {
         given()
                 .spec(requestSpec())
                 .body(testUser)
-                .post("user/");
+                .post(apiProperties().getProperty("api.user.base"));
     }
 
     @Test
@@ -40,7 +37,7 @@ public class UpdateUserTest extends BaseTest {
                 .spec(requestSpec())
                 .body(newUser)
                 .pathParam("username", testUser.username())
-                .put("user/{username}")
+                .put(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
@@ -66,7 +63,7 @@ public class UpdateUserTest extends BaseTest {
                 .spec(requestSpec())
                 .body(newUser)
                 .pathParam("username", testUser.username())
-                .put("user/{username}")
+                .put(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(200))
                 .body(matchesJsonSchemaInClasspath("infoResponseSchema.json"))

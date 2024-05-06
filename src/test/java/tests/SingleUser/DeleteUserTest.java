@@ -8,17 +8,14 @@ import models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import tests.BaseTest;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
-import static specs.Specs.requestSpec;
-import static specs.Specs.responseSpec;
 
 @Epic("Users")
 @Feature("Delete user by username")
-public class DeleteUserTest extends BaseTest {
+public class DeleteUserTest extends UserBaseTest {
     User testUser = new User(666, "Quattro", "Sam", "Something", "gmail@gmail.com", "qwerty123", "88805050707", 3);
 
     @BeforeEach
@@ -26,7 +23,7 @@ public class DeleteUserTest extends BaseTest {
         given()
                 .spec(requestSpec())
                 .body(testUser)
-                .post("user/");
+                .post(apiProperties().getProperty("api.user.base"));
     }
 
     @Test
@@ -35,7 +32,7 @@ public class DeleteUserTest extends BaseTest {
     public void deleteUser() {
         given()
                 .spec(requestSpec())
-                .delete("user/{username}", testUser.username())
+                .delete(apiProperties().getProperty("api.user.base") + "{username}", testUser.username())
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()

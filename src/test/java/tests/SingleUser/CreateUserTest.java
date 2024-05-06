@@ -7,19 +7,16 @@ import io.qameta.allure.SeverityLevel;
 import models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import tests.BaseTest;
 
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
-import static specs.Specs.requestSpec;
-import static specs.Specs.responseSpec;
 
 @Epic("Users")
 @Feature("Create user")
-public class CreateUserTest extends BaseTest {
+public class CreateUserTest extends UserBaseTest {
     @Test
     @Severity(SeverityLevel.BLOCKER)
     @DisplayName("Create user without pojo")
@@ -36,7 +33,7 @@ public class CreateUserTest extends BaseTest {
         given()
                 .spec(requestSpec())
                 .body(testUser1)
-                .post("user/")
+                .post(apiProperties().getProperty("api.user.base"))
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
@@ -53,7 +50,7 @@ public class CreateUserTest extends BaseTest {
         given()
                 .spec(requestSpec())
                 .body(testUser1)
-                .post("user/")
+                .post(apiProperties().getProperty("api.user.base"))
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()

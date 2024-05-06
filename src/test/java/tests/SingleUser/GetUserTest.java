@@ -8,18 +8,15 @@ import models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import tests.BaseTest;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static specs.Specs.requestSpec;
-import static specs.Specs.responseSpec;
 
 @Epic("Users")
 @Feature("Get user by username")
-public class GetUserTest extends BaseTest {
+public class GetUserTest extends UserBaseTest {
     User testUser = new User(666, "Quattro", "Sam", "Something", "gmail@gmail.com", "qwerty123", "88805050707", 3);
 
     @BeforeEach
@@ -27,7 +24,7 @@ public class GetUserTest extends BaseTest {
         given()
                 .spec(requestSpec())
                 .body(testUser)
-                .post("user/");
+                .post(apiProperties().getProperty("api.user.base"));
     }
 
     @Test
@@ -37,7 +34,7 @@ public class GetUserTest extends BaseTest {
         given()
                 .spec(requestSpec())
                 .pathParam("username", testUser.username())
-                .get("user/{username}")
+                .get(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
@@ -59,7 +56,7 @@ public class GetUserTest extends BaseTest {
         User userResponse = given()
                 .spec(requestSpec())
                 .pathParam("username", testUser.username())
-                .get("user/{username}")
+                .get(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(200))
                 .body(matchesJsonSchemaInClasspath("singleUserSchema.json"))
@@ -81,7 +78,7 @@ public class GetUserTest extends BaseTest {
         given()
                 .spec(requestSpec())
                 .pathParam("username", "useruseruser")
-                .get("user/{username}")
+                .get(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(404))
                 .assertThat()
@@ -98,7 +95,7 @@ public class GetUserTest extends BaseTest {
         given()
                 .spec(requestSpec())
                 .pathParam("username", largeUsername)
-                .get("user/{username}")
+                .get(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .assertThat()
                 .statusCode(414);

@@ -14,6 +14,7 @@ val junitVersion = "5.10.2"
 val restAssuredVersion = "5.4.0"
 val jacksonVersion = "2.17.0"
 val allureVersion = "2.27.0"
+val apachePoiVersion = "5.2.5"
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
@@ -31,6 +32,9 @@ dependencies {
 
     testImplementation("io.qameta.allure:allure-junit5:$allureVersion")
     implementation("io.qameta.allure:allure-rest-assured:$allureVersion")
+
+    implementation("org.apache.poi:poi:$apachePoiVersion")
+    implementation("org.apache.poi:poi-ooxml:$apachePoiVersion")
 
     testImplementation("org.slf4j:slf4j-simple:2.0.13")
     implementation("commons-codec:commons-codec:1.16.1")

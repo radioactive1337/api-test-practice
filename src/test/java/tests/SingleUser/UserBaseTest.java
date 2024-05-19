@@ -25,24 +25,29 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserBaseTest {
 
+    //  setting up log config
     private final LogConfig logCfg = LogConfig
             .logConfig()
             .enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL);
 
+    //  log config -> rest assured config
     private final RestAssuredConfig cfg = RestAssuredConfig
             .config()
             .logConfig(logCfg);
 
+    //  setting up request config
     public RequestSpecification requestSpec() {
         return new RequestSpecBuilder()
                 .setBaseUri(apiProperties().getProperty("api.base_url"))
                 .setRelaxedHTTPSValidation()
                 .setContentType(JSON)
                 .setAccept(JSON)
+                .log(LogDetail.BODY)
                 .setConfig(cfg)
                 .build();
     }
 
+    //  setting up response config
     public ResponseSpecification responseSpec(int status) {
         return new ResponseSpecBuilder()
                 .log(LogDetail.STATUS)
@@ -52,6 +57,7 @@ public class UserBaseTest {
                 .build();
     }
 
+    //  extract api properties from .properties file
     public Properties apiProperties() {
         Properties properties = new Properties();
         try (FileReader fileReader = new FileReader("src/test/resources/config.properties")) {

@@ -32,12 +32,12 @@ public class DeleteUserTest extends UserBaseTest {
     public void deleteUser() {
         given()
                 .spec(requestSpec())
-                .delete(apiProperties().getProperty("api.user.base") + "{username}", testUser.username())
+                .delete(apiProperties().getProperty("api.user.base") + "{username}", testUser.getUsername())
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
                 .body(matchesJsonSchemaInClasspath("infoResponseSchema.json"))
-                .body("message", equalTo(testUser.username()))
+                .body("message", equalTo(testUser.getUsername()))
                 .body("code", equalTo(200));
     }
 }

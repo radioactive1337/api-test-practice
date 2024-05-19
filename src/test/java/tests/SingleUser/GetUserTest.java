@@ -33,20 +33,20 @@ public class GetUserTest extends UserBaseTest {
     public void getUser() {
         given()
                 .spec(requestSpec())
-                .pathParam("username", testUser.username())
+                .pathParam("username", testUser.getUsername())
                 .get(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
                 .body(matchesJsonSchemaInClasspath("singleUserSchema.json"))
-                .body("id", equalTo(testUser.id()))
-                .body("username", equalTo(testUser.username()))
-                .body("firstName", equalTo(testUser.firstName()))
-                .body("lastName", equalTo(testUser.lastName()))
-                .body("email", equalTo(testUser.email()))
-                .body("password", equalTo(testUser.password()))
-                .body("phone", equalTo(testUser.phone()))
-                .body("userStatus", equalTo(testUser.userStatus()));
+                .body("id", equalTo(testUser.getId()))
+                .body("username", equalTo(testUser.getUsername()))
+                .body("firstName", equalTo(testUser.getFirstName()))
+                .body("lastName", equalTo(testUser.getLastName()))
+                .body("email", equalTo(testUser.getEmail()))
+                .body("password", equalTo(testUser.getPassword()))
+                .body("phone", equalTo(testUser.getPhone()))
+                .body("userStatus", equalTo(testUser.getUserStatus()));
     }
 
     @Test
@@ -55,20 +55,21 @@ public class GetUserTest extends UserBaseTest {
     public void getUserWithPojo() {
         User userResponse = given()
                 .spec(requestSpec())
-                .pathParam("username", testUser.username())
+                .pathParam("username", testUser.getUsername())
                 .get(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(200))
                 .body(matchesJsonSchemaInClasspath("singleUserSchema.json"))
                 .extract().as(User.class);
-        assertEquals(userResponse.id(), testUser.id(), "id is not as expected");
-        assertEquals(userResponse.username(), testUser.username(), "username is not as expected");
-        assertEquals(userResponse.firstName(), testUser.firstName(), "firstname is not as expected");
-        assertEquals(userResponse.lastName(), testUser.lastName(), "lastname is not as expected");
-        assertEquals(userResponse.email(), testUser.email(), "email is not as expected");
-        assertEquals(userResponse.password(), testUser.password(), "password is not as expected");
-        assertEquals(userResponse.phone(), testUser.phone(), "phone is not as expected");
-        assertEquals(userResponse.userStatus(), testUser.userStatus(), "usersatus is not as expected");
+
+        assertEquals(userResponse.getId(), testUser.getId(), "id is not as expected");
+        assertEquals(userResponse.getUsername(), testUser.getUsername(), "username is not as expected");
+        assertEquals(userResponse.getFirstName(), testUser.getFirstName(), "firstname is not as expected");
+        assertEquals(userResponse.getLastName(), testUser.getLastName(), "lastname is not as expected");
+        assertEquals(userResponse.getEmail(), testUser.getEmail(), "email is not as expected");
+        assertEquals(userResponse.getPassword(), testUser.getPassword(), "password is not as expected");
+        assertEquals(userResponse.getPhone(), testUser.getPhone(), "phone is not as expected");
+        assertEquals(userResponse.getUserStatus(), testUser.getUserStatus(), "usersatus is not as expected");
     }
 
     @Test
@@ -101,19 +102,7 @@ public class GetUserTest extends UserBaseTest {
                 .statusCode(414);
     }
 
-//    @Test
-//    @Severity(SeverityLevel.BLOCKER)
-//    @DisplayName("Get invalid user user by username")
-//    public void getInvalidUser() {
-//        given()
-//                .spec(requestSpec())
-//                .pathParam("username", 12.2f)
-//                .get("user/{username}")
-//                .then()
-//                .spec(responseSpec(400))
-//                .log().all();
-//    }
-
+    //  generating a string of a given length
     private String generateLongString(int length) {
         return "a".repeat(Math.max(0, length));
     }

@@ -36,13 +36,13 @@ public class UpdateUserTest extends UserBaseTest {
         given()
                 .spec(requestSpec())
                 .body(newUser)
-                .pathParam("username", testUser.username())
+                .pathParam("username", testUser.getUsername())
                 .put(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(200))
                 .assertThat()
                 .body(matchesJsonSchemaInClasspath("infoResponseSchema.json"))
-                .body("message", equalTo(newUser.id().toString()))
+                .body("message", equalTo(newUser.getId().toString()))
                 .body("code", equalTo(200));
     }
 
@@ -62,7 +62,7 @@ public class UpdateUserTest extends UserBaseTest {
         given()
                 .spec(requestSpec())
                 .body(newUser)
-                .pathParam("username", testUser.username())
+                .pathParam("username", testUser.getUsername())
                 .put(apiProperties().getProperty("api.user.base") + "{username}")
                 .then()
                 .spec(responseSpec(200))

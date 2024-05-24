@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -50,15 +50,14 @@ public class UpdateUserTest extends UserBaseTest {
     @Severity(SeverityLevel.BLOCKER)
     @DisplayName("Update user without pojo")
     public void updateUser() {
-        HashMap<String, Object> newUser = new HashMap<>();
-        newUser.put("id", 222);
-        newUser.put("username", "nickname");
-        newUser.put("firstName", "Sam");
-        newUser.put("lastName", "Altman");
-        newUser.put("email", "mail@mail.com");
-        newUser.put("password", "qwerty123");
-        newUser.put("phone", "88805050707");
-        newUser.put("userStatus", "1");
+        Map<String, Object> newUser = Map.of("id", 222,
+                "username", "nickname",
+                "firstName", "Sam",
+                "lastName", "Altman",
+                "email", "mail@mail.com",
+                "password", "qwerty123",
+                "phone", "88805050707",
+                "userStatus", "1");
         given()
                 .spec(requestSpec())
                 .body(newUser)

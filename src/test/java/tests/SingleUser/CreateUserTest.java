@@ -11,8 +11,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import tools.ExcelHelper;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
@@ -29,15 +29,16 @@ public class CreateUserTest extends UserBaseTest {
     @Severity(SeverityLevel.BLOCKER)
     @DisplayName("Create user without pojo")
     public void createUser() {
-        HashMap<String, Object> testUser1 = new HashMap<>();
-        testUser1.put("id", 123);
-        testUser1.put("username", "nickname");
-        testUser1.put("firstName", "Sam");
-        testUser1.put("lastName", "Altman");
-        testUser1.put("email", "mail@mail.com");
-        testUser1.put("password", "qwerty123");
-        testUser1.put("phone", "88805050707");
-        testUser1.put("userStatus", 1);
+        Map<String, Object> testUser1 = Map.of(
+                "id", 123,
+                "username", "nickname",
+                "firstName", "Sam",
+                "lastName", "Altman",
+                "email", "mail@mail.com",
+                "password", "qwerty123",
+                "phone", "88805050707",
+                "userStatus", 1
+        );
         given()
                 .spec(requestSpec())
                 .body(testUser1)

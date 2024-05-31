@@ -17,27 +17,27 @@ val allureVersion = "2.27.0"
 val apachePoiVersion = "5.2.5"
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
-    implementation("io.rest-assured:json-path:$restAssuredVersion")
-    implementation("io.rest-assured:json-schema-validator:$restAssuredVersion")
+    testImplementation("io.rest-assured:json-path:$restAssuredVersion")
+    testImplementation("io.rest-assured:json-schema-validator:$restAssuredVersion")
 
-    implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
-    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    testImplementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+    testImplementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 
     testImplementation("io.qameta.allure:allure-junit5:$allureVersion")
-    implementation("io.qameta.allure:allure-rest-assured:$allureVersion")
+    testImplementation("io.qameta.allure:allure-rest-assured:$allureVersion")
 
-    implementation("org.apache.poi:poi:$apachePoiVersion")
-    implementation("org.apache.poi:poi-ooxml:$apachePoiVersion")
+    testImplementation("org.apache.poi:poi-ooxml:$apachePoiVersion")
 
-    testImplementation("org.slf4j:slf4j-simple:2.0.13")
-    implementation("commons-codec:commons-codec:1.16.1")
+    testImplementation("org.slf4j:slf4j-reload4j:2.0.13")
+    testImplementation("org.apache.logging.log4j:log4j-core:2.23.1")
+
+    testCompileOnly("org.projectlombok:lombok:1.18.32")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
+
 }
 
 tasks.test {

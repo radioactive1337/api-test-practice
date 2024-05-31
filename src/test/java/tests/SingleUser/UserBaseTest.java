@@ -42,7 +42,6 @@ public class UserBaseTest {
                 .setRelaxedHTTPSValidation()
                 .setContentType(JSON)
                 .setAccept(JSON)
-                .log(LogDetail.BODY)
                 .setConfig(cfg)
                 .build();
     }
